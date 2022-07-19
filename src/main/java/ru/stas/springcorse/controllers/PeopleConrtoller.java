@@ -16,6 +16,7 @@ public class PeopleConrtoller {
 
     private final PersonDAO personDAO;
 
+    @Autowired
     public PeopleConrtoller(PersonDAO personDAO) {
         this.personDAO = personDAO;
     }
