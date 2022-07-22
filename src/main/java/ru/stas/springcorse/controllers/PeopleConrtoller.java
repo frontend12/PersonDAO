@@ -1,10 +1,12 @@
 package ru.stas.springcorse.controllers;
 
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.stas.springcorse.controllers.dao.PersonDAO;
 import ru.stas.springcorse.controllers.models.Person;
@@ -39,7 +41,11 @@ public class PeopleConrtoller {
     }
 
     @PostMapping
-    public String create(@ModelAttribute("person") Person person){
+    public String create(@ModelAttribute("person") @Valid Person person,
+                         BindingResult bindingResult){
+        if (bindingResult.hasErrors())
+            return "people/new";
+
         personDAO.save(person);
         return "redirect:/people";
 
@@ -52,7 +58,11 @@ public class PeopleConrtoller {
     }
 
     @PatchMapping("/{id}")
-    public String updata(@ModelAttribute("person") Person person, @PathVariable("id") int id){
+    public String updata(@ModelAttribute("person") @Valid Person person, BindingResult bindingResult,
+                         @PathVariable("id") int id){
+        if (bindingResult.hasErrors())
+            return "people/edit";
+
         personDAO.updata(id, person);
         return "redirect:/people";
 
